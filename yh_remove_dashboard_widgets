@@ -1,0 +1,21 @@
+
+function yh_remove_dashboard_widgets() {
+  global $wp_meta_boxes;
+  // $wp_meta_boxes['dashboard']['normal']['core']['dashboard_right_now']
+  // $wp_meta_boxes['dashboard']['normal']['core']['dashboard_recent_comments']
+  // $wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']
+  // $wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']
+
+  // Side Column
+  // $wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']
+  // $wp_meta_boxes['dashboard']['side']['core']['dashboard_recent_drafts']
+  // $wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']
+  // $wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']
+  unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_quick_press']);
+  unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_incoming_links']);
+  unset($wp_meta_boxes['dashboard']['normal']['core']['dashboard_plugins']);
+
+  unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_primary']);
+  unset($wp_meta_boxes['dashboard']['side']['core']['dashboard_secondary']);
+}
+add_action('wp_dashboard_setup', 'yh_remove_dashboard_widgets' );
