@@ -1,0 +1,4 @@
+$post_id = $_POST['id'];
+$cookie_key = 'some_key_prefix_' . $post_id;
+
+setcookie($cookie_key, 1, time()+1209600, COOKIEPATH, COOKIE_DOMAIN, false);
