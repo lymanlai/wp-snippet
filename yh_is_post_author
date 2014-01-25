@@ -1,0 +1,9 @@
+function yh_is_post_author($_post){
+  $author_id=$_post->post_author;
+  $user_id = get_current_user_id();
+
+  if ($author_id != $user_id) {
+    return false;
+  }
+  return true;
+}
