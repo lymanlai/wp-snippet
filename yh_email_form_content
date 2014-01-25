@@ -1,0 +1,67 @@
+
+// $arr = array(
+    // 'subject'=>'new contact form submit',
+    // 'submit_token'=>'is_contact_form_submit',
+    // 'field'=>array(
+        // 'form_name'=>'Name',
+        // 'form_email'=>'Email',
+        // 'form_phone'=>'Telephone',
+        // 'form_comment'=>'Comment',
+    // ),
+  // );
+  // if( yh_email_form_content($arr) )
+  // {
+    // echo 'thanks for your contact';
+  // }
+  // else
+  // {
+    // yh_email_form_content($arr);
+  // }
+function yh_email_form_content($arr)
+{
+  if(!empty($_POST))
+  {
+    $demo_arr = array(
+      'subject'=>'new message from ***',
+      'submit_token'=>'is_submit',
+      'field'=>array(
+        'website'=>'website check',
+      ),
+    );
+
+    if(!empty($_POST[$arr['submit_token']]))
+    {
+      $subject = $arr['subject'];
+      $message = '';
+      foreach( $arr['field'] as $key=>$val )
+      {
+        if(is_array($_POST[$key]))
+        {
+          $_str = '';
+          foreach( $_POST[$key] as $_val )
+          {
+            $_str .= $_val.', ';
+          }
+          $_str = substr($_str,0,-1);
+          $message .= '
+            '.$val.': '.$_str;
+        }
+        else
+        {
+          $message .= '
+            '.$val.': '.@$_POST[$key];
+        }
+      }
+
+      $headers = array(
+        'from_name'=>get_bloginfo('name'),
+        'from_email'=>'',
+      );
+      $send_to_email = get_bloginfo('admin_email');
+      $headers['from_email'] = $send_to_email;
+      wp_mail($send_to_email, $subject, $message,$headers);
+      return true;
+    }
+  }
+  return false;
+}
