@@ -1,0 +1,11 @@
+function yh_home_link($active_class='now',$home_text='HOME')
+{
+  $_class = '';
+  if(is_home())
+  {
+    $_class = $active_class;
+  }
+?>
+<li class="<?php echo $_class?>"><a href="<?php bloginfo('url');?>/"><?php echo $home_text?></a></li>
+<?php
+}
