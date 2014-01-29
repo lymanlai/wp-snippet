@@ -1,0 +1,48 @@
+##[Query Overview](http://codex.wordpress.org/Query_Overview)
+1. wp-config.php, wp-settings.php, etc
+2. WP加载并初始化任何你已经启用的插件（调用插件的init动作）
+3. WP加载“text domain”以便国际化，及从当前的启用模板中加载functions.php
+4. WP运行wp()函数（在wp-includes/functions.php）, 调用$wp->main()($wp是一个WP类的对象，在wp-includes/class-wp.php中定义的)。这告诉WP：
+    
+    1). 通过WP->parse_request()解析URL成查询语句
+    
+    2). 通过$wp_query->parse_query( ) ( $wp_query是WP_Query类的一个对象 ) 设置所有的被[条件标签](http://codex.wordpress.org/Conditional_Tags)使用的is_变量
+    
+    3). 转换查询条件为数据库查询，在函数WP_Query->get_posts()并运行数据库查询以获得帖子列表
+    
+    4). 处理404错误
+    
+    5). 发送博客的HTTP头
+    
+    6). 设置WP循环的一些变量
+    
+5. WP加载你的模板，根据 [模板逻辑](http://codex.wordpress.org/Template_Hierarchy) 计算出该使用哪个模板文件，并运行该文件。
+6. 一般情况下，模板或feed文件运行WP循环打印博客帖子或者页面
+7. 模板或feed文件一般是通过内置WP函数打印一些归档、分类或帖子
+    
+###WP->parse_request()详解
+1. 从URL提取GET变量
+2. 通过调用$wp_rewrite->wp_rewrite_rules()获得当前有效的重写规则，该重写规则一般是一组WP永久链接的模式匹配规则
+3. 按顺序解析重写规则获得匹配重写规则。如果都不匹配，则404错误
+4. 获得当前生效的查询变量，WP检查这些变量是否在永久链接中、POST提交或者GET提交中存在，一旦发现，则保存变量值到查询语句数组
+
+###插件都能修改什么
+* 添加、修改或移除重写规则，以影响永久链接的解析.这一般不通过filters和actions，而是通过调用wp-includes/rewrite.php内的函数，比如add_rewrite_rule, add_rewrite_endpoint等。
+* 添加或移除查询变量，以影响那些保存在查询语句内的变量
+* 修改查询语句，在变量值保存后
+* 通过以下filters修改数据库查询，在其从查询语句创建后：
+
+ 	* posts_where
+ 	* posts_join
+ 	* posts_groupby
+ 	* posts_orderby
+ 	* posts_distinct
+ 	* posts_fields
+ 	* post_limits
+ 	* posts_where_paged
+ 	* posts_join_paged
+ 	* posts_request
+ 	
+* 修改数据库查询结果(the_posts filter)
+* 覆盖默认模板文件(template_redirect action)
+ 	
